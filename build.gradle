@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'checkstyle'
+
+version = '0.1'
+
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+war.archiveName = 'quick-table-editor.war'
+
+allprojects {
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    repositories {
+        maven { url 'http://repo2.maven.org/maven2/' }
+    }
+}
+
+dependencies {
+    providedCompile 'javax.servlet:servlet-api:2.5'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.slf4j:slf4j-log4j12:1.7.21'
+    compile 'commons-dbutils:commons-dbutils:1.6'
+    compile 'commons-dbcp:commons-dbcp:1.4'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    compile 'com.h2database:h2:1.3.176'
+    testCompile 'junit:junit:4.12'
+}
+
+task sourcesJar(type:Jar, dependsOn: classes){
+    classifier = 'sources'
+    from sourceSets.main.allJava.srcDirs
+    include "**/*.java"
+}
+
+task javadocJar(type: Jar) {
+    classifier = "javadoc"
+    from javadoc
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+jar {
+    exclude('log4j.properties')
+}
+

@@ -1,0 +1,10 @@
+{
+  "name": "quick-table-editor",
+  "version": "0.1.0",
+  "authors": [
+    "maxiaohao <maxiaohao@gmail.com>"
+  ],
+  "dependencies": {
+    "maxiaohao/jquery-easyui": "1.5"
+  }
+}
