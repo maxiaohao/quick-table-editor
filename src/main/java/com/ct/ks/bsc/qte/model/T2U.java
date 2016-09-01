@@ -8,38 +8,38 @@ package com.ct.ks.bsc.qte.model;
  */
 public class T2U {
 
-    long T2U_ID;
-    long USER_ID;
-    long TABLE_ID;
+    long t2u_id;
+    long user_id;
+    long table_id;
 
 
-    public long getT2U_ID() {
-        return T2U_ID;
+    public long getT2u_id() {
+        return t2u_id;
     }
 
 
-    public void setT2U_ID(long t2u_ID) {
-        T2U_ID = t2u_ID;
+    public void setT2u_id(long t2u_id) {
+        this.t2u_id = t2u_id;
     }
 
 
-    public long getUSER_ID() {
-        return USER_ID;
+    public long getUser_id() {
+        return user_id;
     }
 
 
-    public void setUSER_ID(long uSER_ID) {
-        USER_ID = uSER_ID;
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
     }
 
 
-    public long getTABLE_ID() {
-        return TABLE_ID;
+    public long getTable_id() {
+        return table_id;
     }
 
 
-    public void setTABLE_ID(long tABLE_ID) {
-        TABLE_ID = tABLE_ID;
+    public void setTable_id(long table_id) {
+        this.table_id = table_id;
     }
 
 }

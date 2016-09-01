@@ -6,8 +6,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.ct.ks.bsc.qte.core.Constants;
-import com.ct.ks.bsc.qte.util.db.DataSourcePool;
-import com.ct.ks.bsc.qte.util.db.SqlRunner;
+import com.ct.ks.bsc.qte.db.DataSourcePool;
+import com.ct.ks.bsc.qte.db.SqlRunner;
 
 public class AppListener implements ServletContextListener {
 

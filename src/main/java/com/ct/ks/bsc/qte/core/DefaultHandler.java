@@ -6,14 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ct.ks.bsc.qte.util.db.DataSourcePool;
-import com.ct.ks.bsc.qte.util.db.SqlRunner;
+import com.ct.ks.bsc.qte.db.DataSourcePool;
+import com.ct.ks.bsc.qte.db.SqlRunner;
 
 public class DefaultHandler {
-
-    public static List<String> listTables(String schema){
-
-    }
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 

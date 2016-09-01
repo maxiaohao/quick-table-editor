@@ -2,60 +2,60 @@ package com.ct.ks.bsc.qte.model;
 
 public class User {
 
-    long USER_ID;
-    String USER_NAME;
-    String PWD_MD5;
-    boolean IS_ADMIN;
-    boolean IS_DISABLED;
+    long user_id;
+    String user_name;
+    String pwd_md5;
+    boolean is_admin;
+    boolean is_disabled;
 
 
-    public long getUSER_ID() {
-        return USER_ID;
+    public long getUser_id() {
+        return user_id;
     }
 
 
-    public void setUSER_ID(long uSER_ID) {
-        USER_ID = uSER_ID;
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
     }
 
 
-    public String getUSER_NAME() {
-        return USER_NAME;
+    public String getUser_name() {
+        return user_name;
     }
 
 
-    public void setUSER_NAME(String uSER_NAME) {
-        USER_NAME = uSER_NAME;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
 
-    public String getPWD_MD5() {
-        return PWD_MD5;
+    public String getPwd_md5() {
+        return pwd_md5;
     }
 
 
-    public void setPWD_MD5(String pWD_MD5) {
-        PWD_MD5 = pWD_MD5;
+    public void setPwd_md5(String pwd_md5) {
+        this.pwd_md5 = pwd_md5;
     }
 
 
-    public boolean isIS_ADMIN() {
-        return IS_ADMIN;
+    public boolean isIs_admin() {
+        return is_admin;
     }
 
 
-    public void setIS_ADMIN(boolean iS_ADMIN) {
-        IS_ADMIN = iS_ADMIN;
+    public void setIs_admin(boolean is_admin) {
+        this.is_admin = is_admin;
     }
 
 
-    public boolean isIS_DISABLED() {
-        return IS_DISABLED;
+    public boolean isIs_disabled() {
+        return is_disabled;
     }
 
 
-    public void setIS_DISABLED(boolean iS_DISABLED) {
-        IS_DISABLED = iS_DISABLED;
+    public void setIs_disabled(boolean is_disabled) {
+        this.is_disabled = is_disabled;
     }
 
 }

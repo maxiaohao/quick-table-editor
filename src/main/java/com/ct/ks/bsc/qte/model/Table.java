@@ -2,82 +2,82 @@ package com.ct.ks.bsc.qte.model;
 
 public class Table {
 
-    long TABLE_ID;
-    long DS_ID;
-    String TABLE_SCHEMA;
-    String TABLE_NAME;
-    String TABLE_TITLE;
-    String TABLE_DESC;
-    boolean IS_DISABLED;
+    long table_id;
+    long ds_id;
+    String table_schema;
+    String table_name;
+    String table_title;
+    String table_desc;
+    boolean is_disabled;
 
 
-    public long getTABLE_ID() {
-        return TABLE_ID;
+    public long getTable_id() {
+        return table_id;
     }
 
 
-    public void setTABLE_ID(long tABLE_ID) {
-        TABLE_ID = tABLE_ID;
+    public void setTable_id(long table_id) {
+        this.table_id = table_id;
     }
 
 
-    public long getDS_ID() {
-        return DS_ID;
+    public long getDs_id() {
+        return ds_id;
     }
 
 
-    public void setDS_ID(long dS_ID) {
-        DS_ID = dS_ID;
+    public void setDs_id(long ds_id) {
+        this.ds_id = ds_id;
     }
 
 
-    public String getTABLE_SCHEMA() {
-        return TABLE_SCHEMA;
+    public String getTable_schema() {
+        return table_schema;
     }
 
 
-    public void setTABLE_SCHEMA(String tABLE_SCHEMA) {
-        TABLE_SCHEMA = tABLE_SCHEMA;
+    public void setTable_schema(String table_schema) {
+        this.table_schema = table_schema;
     }
 
 
-    public String getTABLE_NAME() {
-        return TABLE_NAME;
+    public String getTable_name() {
+        return table_name;
     }
 
 
-    public void setTABLE_NAME(String tABLE_NAME) {
-        TABLE_NAME = tABLE_NAME;
+    public void setTable_name(String table_name) {
+        this.table_name = table_name;
     }
 
 
-    public String getTABLE_TITLE() {
-        return TABLE_TITLE;
+    public String getTable_title() {
+        return table_title;
     }
 
 
-    public void setTABLE_TITLE(String tABLE_TITLE) {
-        TABLE_TITLE = tABLE_TITLE;
+    public void setTable_title(String table_title) {
+        this.table_title = table_title;
     }
 
 
-    public String getTABLE_DESC() {
-        return TABLE_DESC;
+    public String getTable_desc() {
+        return table_desc;
     }
 
 
-    public void setTABLE_DESC(String tABLE_DESC) {
-        TABLE_DESC = tABLE_DESC;
+    public void setTable_desc(String table_desc) {
+        this.table_desc = table_desc;
     }
 
 
-    public boolean isIS_DISABLED() {
-        return IS_DISABLED;
+    public boolean isIs_disabled() {
+        return is_disabled;
     }
 
 
-    public void setIS_DISABLED(boolean iS_DISABLED) {
-        IS_DISABLED = iS_DISABLED;
+    public void setIs_disabled(boolean is_disabled) {
+        this.is_disabled = is_disabled;
     }
 
 }

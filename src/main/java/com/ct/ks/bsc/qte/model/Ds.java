@@ -2,81 +2,82 @@ package com.ct.ks.bsc.qte.model;
 
 public class Ds {
 
-    long DS_ID;
-    String DS_NAME;
-    String JDBC_DRIVER;
-    String JDBC_URL;
-    String USERNAME;
-    String PASSWORD;
-    boolean IS_DISABLED;
+    long ds_id;
+    String ds_name;
+    String jdbc_driver;
+    String jdbc_url;
+    String username;
+    String password;
+    boolean is_disabled;
 
 
-    public long getDS_ID() {
-        return DS_ID;
+    public long getDs_id() {
+        return ds_id;
     }
 
 
-    public void setDS_ID(long dS_ID) {
-        DS_ID = dS_ID;
+    public void setDs_id(long ds_id) {
+        this.ds_id = ds_id;
     }
 
 
-    public String getDS_NAME() {
-        return DS_NAME;
+    public String getDs_name() {
+        return ds_name;
     }
 
 
-    public void setDS_NAME(String dS_NAME) {
-        DS_NAME = dS_NAME;
+    public void setDs_name(String ds_name) {
+        this.ds_name = ds_name;
     }
 
 
-    public String getJDBC_DRIVER() {
-        return JDBC_DRIVER;
+    public String getJdbc_driver() {
+        return jdbc_driver;
     }
 
 
-    public void setJDBC_DRIVER(String jDBC_DRIVER) {
-        JDBC_DRIVER = jDBC_DRIVER;
+    public void setJdbc_driver(String jdbc_driver) {
+        this.jdbc_driver = jdbc_driver;
     }
 
 
-    public String getJDBC_URL() {
-        return JDBC_URL;
+    public String getJdbc_url() {
+        return jdbc_url;
     }
 
 
-    public void setJDBC_URL(String jDBC_URL) {
-        JDBC_URL = jDBC_URL;
+    public void setJdbc_url(String jdbc_url) {
+        this.jdbc_url = jdbc_url;
     }
 
 
-    public String getUSERNAME() {
-        return USERNAME;
+    public String getUsername() {
+        return username;
     }
 
 
-    public void setUSERNAME(String uSERNAME) {
-        USERNAME = uSERNAME;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 
-    public String getPASSWORD() {
-        return PASSWORD;
+    public String getPassword() {
+        return password;
     }
 
 
-    public void setPASSWORD(String pASSWORD) {
-        PASSWORD = pASSWORD;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 
-    public boolean isIS_DISABLED() {
-        return IS_DISABLED;
+    public boolean isIs_disabled() {
+        return is_disabled;
     }
 
 
-    public void setIS_DISABLED(boolean iS_DISABLED) {
-        IS_DISABLED = iS_DISABLED;
+    public void setIs_disabled(boolean is_disabled) {
+        this.is_disabled = is_disabled;
     }
+
 }

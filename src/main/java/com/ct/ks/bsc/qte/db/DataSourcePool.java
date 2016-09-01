@@ -1,4 +1,4 @@
-package com.ct.ks.bsc.qte.util.db;
+package com.ct.ks.bsc.qte.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
