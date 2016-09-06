@@ -3,7 +3,7 @@ package com.ct.ks.bsc.qte.model;
 /**
  * Table to User
  *
- * @author xma11
+ * @author xma11 <maxiaohao@gmail.com>
  *
  */
 public class T2U {

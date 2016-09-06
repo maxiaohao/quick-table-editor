@@ -1,3 +1,3 @@
-quick-table-client
+quick-table-editor
 ==================
 

@@ -1,5 +1,10 @@
 package com.ct.ks.bsc.qte.core;
 
+/**
+ *
+ * @author xma11
+ *
+ */
 public interface Constants {
 
     String CONFIG_H2_JDBC_DRIVER = "org.h2.Driver";

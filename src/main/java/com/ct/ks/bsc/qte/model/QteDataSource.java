@@ -1,10 +1,10 @@
 package com.ct.ks.bsc.qte.model;
 
-public class Ds {
+public class QteDataSource {
 
     long ds_id;
     String ds_name;
-    String jdbc_driver;
+    String jdbc_class;
     String jdbc_url;
     String username;
     String password;
@@ -31,13 +31,13 @@ public class Ds {
     }
 
 
-    public String getJdbc_driver() {
-        return jdbc_driver;
+    public String getJdbc_class() {
+        return jdbc_class;
     }
 
 
-    public void setJdbc_driver(String jdbc_driver) {
-        this.jdbc_driver = jdbc_driver;
+    public void setJdbc_class(String jdbc_class) {
+        this.jdbc_class = jdbc_class;
     }
 
 
