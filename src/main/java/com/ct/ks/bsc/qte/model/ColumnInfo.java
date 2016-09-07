@@ -24,7 +24,8 @@ public class ColumnInfo {
     boolean nullable;
     String remarks;
     Object column_def;
-    boolean is_autoincrement;
+    boolean autoincrement;
+    boolean primary_key;
 
 
     public String getTable_schem() {
@@ -209,13 +210,23 @@ public class ColumnInfo {
     }
 
 
-    public boolean isIs_autoincrement() {
-        return is_autoincrement;
+    public boolean isAutoincrement() {
+        return autoincrement;
     }
 
 
-    public void setIs_autoincrement(boolean is_autoincrement) {
-        this.is_autoincrement = is_autoincrement;
+    public void setAutoincrement(boolean autoincrement) {
+        this.autoincrement = autoincrement;
+    }
+
+
+    public boolean isPrimary_key() {
+        return primary_key;
+    }
+
+
+    public void setPrimary_key(boolean primary_key) {
+        this.primary_key = primary_key;
     }
 
     /**

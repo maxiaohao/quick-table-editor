@@ -4,9 +4,11 @@ public class User {
 
     long user_id;
     String user_name;
-    String pwd_md5;
-    boolean is_admin;
-    boolean is_disabled;
+    String pwd_md5; // not in db model
+    String salt;
+    String salted_md5; // salted_md5 = md5(user_name + pwd_md5 + salt)
+    boolean admin;
+    boolean disabled;
 
 
     public long getUser_id() {
@@ -39,23 +41,43 @@ public class User {
     }
 
 
-    public boolean isIs_admin() {
-        return is_admin;
+    public String getSalt() {
+        return salt;
     }
 
 
-    public void setIs_admin(boolean is_admin) {
-        this.is_admin = is_admin;
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
 
-    public boolean isIs_disabled() {
-        return is_disabled;
+    public String getSalted_md5() {
+        return salted_md5;
     }
 
 
-    public void setIs_disabled(boolean is_disabled) {
-        this.is_disabled = is_disabled;
+    public void setSalted_md5(String salted_md5) {
+        this.salted_md5 = salted_md5;
+    }
+
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
 }

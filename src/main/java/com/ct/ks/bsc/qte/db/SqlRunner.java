@@ -2,7 +2,6 @@ package com.ct.ks.bsc.qte.db;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -22,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.ks.bsc.qte.core.Constants;
-import com.ct.ks.bsc.qte.model.ColumnInfo;
 
 public class SqlRunner {
 
@@ -807,95 +805,4 @@ public class SqlRunner {
         return null;
     }
 
-
-    public List<String> getSchemaNames() throws SQLException {
-        List<String> ret = new ArrayList<String>();
-        Connection conn = null;
-        try {
-            conn = DataSourcePool.getConnection(this.dsName);
-            DatabaseMetaData m = conn.getMetaData();
-            ResultSet rs = m.getSchemas();
-            String colSchemaName = ColumnInfo.getActualColName(rs.getMetaData(),
-                    Constants.META_COL_TYPICAL_NAME_TABLE_SCHEM);
-            while (rs.next()) {
-                ret.add(rs.getString(colSchemaName));
-            }
-            rs.close();
-            return ret;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new SQLException(e);
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
-
-
-    public List<String> getTableNames(String schemaName) throws SQLException {
-        List<String> ret = new ArrayList<String>();
-        Connection conn = null;
-        try {
-            conn = DataSourcePool.getConnection(this.dsName);
-            DatabaseMetaData m = conn.getMetaData();
-            ResultSet rs = m.getTables(null, schemaName, null, null);
-            String colNameTable = ColumnInfo.getActualColName(rs.getMetaData(),
-                    Constants.META_COL_TYPICAL_NAME_TABLE_NAME);
-            while (rs.next()) {
-                ret.add(rs.getString(colNameTable));
-            }
-            rs.close();
-            return ret;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new SQLException(e);
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
-
-
-    public List<ColumnInfo> getColumnInfo(String schemaName, String tableName) throws SQLException {
-        List<ColumnInfo> ret = new ArrayList<ColumnInfo>();
-        Connection conn = null;
-        try {
-            conn = DataSourcePool.getConnection(this.dsName);
-            DatabaseMetaData m = conn.getMetaData();
-            ResultSet rs = m.getColumns(null, schemaName, tableName, null);
-            ResultSetMetaData rsm = rs.getMetaData();
-
-            while (rs.next()) {
-                ColumnInfo colInf = new ColumnInfo();
-                colInf.setTable_schem(rs.getString(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_TABLE_SCHEM)));
-                colInf.setTable_name(rs.getString(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_TABLE_NAME)));
-                colInf.setColumn_name(rs.getString(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_COLUMN_NAME)));
-                colInf.setData_type(rs.getInt(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_DATA_TYPE)));
-                colInf.setType_name(rs.getString(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_TYPE_NAME)));
-                colInf.setColumn_size(rs.getInt(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_COLUMN_SIZE)));
-                colInf.setDecimal_digits(rs.getInt(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_DECIMAL_DIGITS)));
-                colInf.setNullable(rs.getBoolean(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_NULLABLE)));
-                colInf.setRemarks(rs.getString(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_REMARKS)));
-                colInf.setColumn_def(rs.getObject(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_COLUMN_DEF)));
-                colInf.setIs_autoincrement(rs.getBoolean(ColumnInfo.getActualColName(rsm,
-                        Constants.META_COL_TYPICAL_NAME_IS_AUTOINCREMENT)));
-                ret.add(colInf);
-            }
-            rs.close();
-            return ret;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new SQLException(e);
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
 }

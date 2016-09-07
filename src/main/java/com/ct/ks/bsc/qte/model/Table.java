@@ -8,7 +8,7 @@ public class Table {
     String table_name;
     String table_title;
     String table_desc;
-    boolean is_disabled;
+    boolean disabled;
 
 
     public long getTable_id() {
@@ -71,13 +71,13 @@ public class Table {
     }
 
 
-    public boolean isIs_disabled() {
-        return is_disabled;
+    public boolean isDisabled() {
+        return disabled;
     }
 
 
-    public void setIs_disabled(boolean is_disabled) {
-        this.is_disabled = is_disabled;
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
 }

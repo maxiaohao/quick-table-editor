@@ -12,6 +12,8 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 
 import com.ct.ks.bsc.qte.core.Constants;
+import com.ct.ks.bsc.qte.core.MasterCrudHandler;
+import com.ct.ks.bsc.qte.model.QteDataSource;
 
 public class DataSourcePool {
 
@@ -26,10 +28,14 @@ public class DataSourcePool {
         } else if (null == ds) {
             Properties p = new Properties();
             p.load(DataSourcePool.class.getClassLoader().getResourceAsStream(DBCP_PROPERTIES_FILENAME));
-            // driverClassName=
-            // url=
-            // username=
-            // password=
+            QteDataSource qteDs = MasterCrudHandler.getInstance().getQteDataSource(dsName);
+            if (null == qteDs) {
+                throw new Exception("failed to get datasource conf info from master db (dsName=" + dsName + ")");
+            }
+            p.setProperty("driverClassName", qteDs.getJdbc_class());
+            p.setProperty("url", qteDs.getJdbc_url());
+            p.setProperty("username", qteDs.getUsername());
+            p.setProperty("password", qteDs.getPassword());
             ds = BasicDataSourceFactory.createDataSource(p);
             dss.put(dsName, ds);
         }
