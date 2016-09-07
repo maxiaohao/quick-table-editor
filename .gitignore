@@ -19,4 +19,5 @@ bin/
 private_doc/
 tmp/
 *.local.debug.*
+src/main/webapp/third-party
 
