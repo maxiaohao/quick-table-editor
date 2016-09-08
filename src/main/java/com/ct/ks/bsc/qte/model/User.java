@@ -4,6 +4,7 @@ public class User {
 
     long user_id;
     String login_name;
+    String user_name;
     String pwd_md5; // not in db model
     String salt;
     String salted_md5; // salted_md5 = upper(md5(user_name + upper(pwd_md5) + salt))
@@ -28,6 +29,16 @@ public class User {
 
     public void setLogin_name(String login_name) {
         this.login_name = login_name;
+    }
+
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
 

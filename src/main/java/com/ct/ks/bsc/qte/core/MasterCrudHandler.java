@@ -34,9 +34,12 @@ public class MasterCrudHandler {
             String newSalt = StringUtils.getRandomCapitalLetters(4);
             // salted_md5 = upper(md5(user_name + upper(pwd_md5) + salt))
             String saltedMd5 = StringUtils.md5(user.getLogin_name() + (user.getPwd_md5() + "").toUpperCase() + newSalt);
-            SqlRunner.getMasterInstance().exec(
-                    "insert into QTE_T_USER (LOGIN_NAME, SALT, SALTED_MD5, IS_ADMIN, IS_DISABLED) values (?,?,?,?,?)",
-                    user.getLogin_name(), newSalt, saltedMd5, user.isAdmin(), user.isDisabled());
+            SqlRunner
+                    .getMasterInstance()
+                    .exec(
+                            "insert into QTE_T_USER (LOGIN_NAME, USER_NAME, SALT, SALTED_MD5, IS_ADMIN, IS_DISABLED)"
+                                    + " values (?,?,?,?,?,?)", user.getLogin_name(), user.getUser_name(), newSalt,
+                            saltedMd5, user.isAdmin(), user.isDisabled());
         } catch (Exception e) {
             return new CrudResult(false, "error occurred while creating new user: " + e.getLocalizedMessage());
         }
@@ -44,14 +47,14 @@ public class MasterCrudHandler {
     }
 
 
-    public CrudResult getUser(String userName) {
+    public CrudResult getUser(long userId) {
         try {
             User user = SqlRunner.getMasterInstance().queryObj(User.class,
-                    "select * from QTE_T_USER where USER_NAME=?",
-                    userName);
+                    "select * from QTE_T_USER where USER_ID=?",
+                    userId);
             return new CrudResult(true, user);
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while getting user (" + userName + "): "
+            return new CrudResult(false, "error occurred while getting user (ID=" + userId + "): "
                     + e.getLocalizedMessage());
         }
     }
@@ -72,16 +75,17 @@ public class MasterCrudHandler {
         try {
             int rows = 0;
             if (user.getPwd_md5() != null || user.getPwd_md5().equals("")) {
-                rows = SqlRunner.getMasterInstance()
+                rows = SqlRunner
+                        .getMasterInstance()
                         .exec(
-                                "update QTE_T_USER set user_name=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
-                                user.getLogin_name(),
+                                "update QTE_T_USER set login_name=?, user_name=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
+                                user.getLogin_name(), user.getUser_name(),
                                 StringUtils.md5(user.getLogin_name() + (user.getPwd_md5() + "").toUpperCase()
                                         + user.getSalt()), user.isAdmin(), user.isDisabled(), userId);
             } else {
                 rows = SqlRunner.getMasterInstance().exec(
-                        "update QTE_T_USER set user_name=?, ADMIN=?, disabled=? where user_id=?", user.getLogin_name(),
-                        user.isAdmin(), user.isDisabled(), userId);
+                        "update QTE_T_USER set login_name=? user_name=?, ADMIN=?, disabled=? where user_id=?",
+                        user.getLogin_name(), user.getUser_name(), user.isAdmin(), user.isDisabled(), userId);
             }
             if (rows > 0) {
                 return new CrudResult(true);
