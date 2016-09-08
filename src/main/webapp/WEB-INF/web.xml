@@ -3,44 +3,17 @@
 <web-app>
     <display-name>quick-table-editor</display-name>
 
-    <filter>
-        <filter-name>xxxxxxx</filter-name>
-        <filter-class>com.ksbsc.cmplnt.util.SetCharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>xxxxxxxx</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <listener>
-        <listener-class>com.ksbsc.cmplnt.scheduled.AppListener</listener-class>
-    </listener>
-
     <servlet>
-        <servlet-name>auEngine</servlet-name>
-        <description></description>
-        <servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+        <description>
+        </description>
+        <display-name>AdminCrudServlet</display-name>
+        <servlet-name>AdminCrudServlet</servlet-name>
+        <servlet-class>com.ct.ks.bsc.qte.servlet.AdminCrudServlet</servlet-class>
     </servlet>
-
-
-    <servlet>
-        <servlet-name>ReloadConfigServlet</servlet-name>
-        <description></description>
-        <servlet-class>com.ct.ks.bsc.qte.servlet.ReloadConfigServlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
-        <servlet-name>ReloadConfigServlet</servlet-name>
-        <url-pattern>/refresh-config</url-pattern>
+        <servlet-name>AdminCrudServlet</servlet-name>
+        <url-pattern>/admin/admin-crud</url-pattern>
     </servlet-mapping>
-
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
