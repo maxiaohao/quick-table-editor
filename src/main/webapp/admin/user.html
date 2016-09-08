@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>User Management</title>
-<link rel="stylesheet" type="text/css" href="../third-party/jquery-easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../third-party/jquery-easyui/themes/bootstrap/easyui.css">
 <link rel="stylesheet" type="text/css" href="../third-party/jquery-easyui/themes/icon.css">
 <!--
 <link rel="stylesheet" type="text/css" href="../css/main.css">
@@ -16,103 +16,59 @@
 </head>
 <body>
     <h2>User Management</h2>
-    <table id="gridUsers"></table>
+    <div id="gridUsers"></div>
 
-    <div id="windowCreateUser" class="easyui-window" title="Create New User"
+    <div id="windowUserDetails" class="easyui-window" title="Create New User"
         style="width: 100%; max-width: 400px; padding: 20px;">
 
-        <form id="formCreateUser" method="post">
+        <form id="formUser" method="post">
             <table>
+                <thead>
+                    <tr>
+                        <th style="width: 110px"></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span>Login Name:</span></td>
+                        <td><input class="easyui-textbox" name="login_name" style="width: 200px"
+                            data-options="iconCls:'icon-man', required:true, prompt: 'Unique login name'"></td>
+                    </tr>
+                    <tr>
+                        <td><span>Is Admin:</span></td>
+                        <td><input class="easyui-switchbutton" name="admin"
+                            data-options="onText:'Yes',offText:'No'" /></td>
+                    </tr>
+                    <tr>
+                        <td><span>Is Disabled:</span></td>
+                        <td><input class="easyui-switchbutton" name="disabled"
+                            data-options="onText:'Yes',offText:'No'" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input id="inputHiddenPwdMd5" type="hidden" name="pwd_md5">
+        </form>
+        <table>
+            <thead>
                 <tr>
                     <th style="width: 110px"></th>
                     <th></th>
                 </tr>
-
+            </thead>
+            <tbody>
                 <tr>
-                    <td><span>Login Name:</span></td>
-                    <td><input class="easyui-validatebox" name="login_name" style="width: 100%"
-                        data-options="required:true, validType:'length[1,40]'"></td>
+                    <td><span>Password:</span></td>
+                    <td><input class="easyui-passwordbox" name="password" style="width: 200px"
+                        data-options="required:true, prompt: 'Password'"></td>
                 </tr>
                 <tr>
-                    <td><span>Is Admin:</span></td>
-                    <td><input class="easyui-switchbutton" name="admin" data-options="onText:'Yes',offText:'No'" /></td>
+                    <td><span>Re-type Password:</span></td>
+                    <td><input class="easyui-passwordbox" name="retype-password" style="width: 200px"
+                        data-options="required:true, prompt: 'Re-type password'"></td>
                 </tr>
-                <tr>
-                    <td><span>Is Disabled:</span></td>
-                    <td><input class="easyui-switchbutton" name="disabled" data-options="onText:'Yes',offText:'No'" /></td>
-                </tr>
-            </table>
-            <input id="inputCreateUserPwdMd5" type="hidden" name="pwd_md5">
-        </form>
-        <table>
-            <tr>
-                <th style="width: 110px"></th>
-                <th></th>
-            </tr>
-            <tr>
-                <td><span>Password:</span></td>
-                <td><input class="easyui-passwordbox" prompt="Password" name="password" style="width: 100%"
-                    data-options="required:true"></td>
-            </tr>
-            <tr>
-                <td><span>Retype Password:</span></td>
-                <td><input class="easyui-passwordbox" prompt="Re-type Password" name="retype-password"
-                    style="width: 100%" data-options="required:true"></td>
-            </tr>
+            </tbody>
         </table>
-        <div style="text-align: center; padding: 20px 0 0 0">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitFormCreateUser();" style="width: 80px"><span>Submit</span></a>
-        </div>
-    </div>
-
-    <div id="windowUpdateUser" class="easyui-window" title="Modify User"
-        style="width: 100%; max-width: 400px; padding: 20px;">
-        <form id="formUpdateUser" method="post">
-            <table>
-                <tr>
-                    <th style="width: 110px"></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td><span>User ID:</span></td>
-                    <td><input class="easyui-validatebox" name="user_id" style="width: 100%"
-                        data-options="readonly: true, disabled: true, required: true"></td>
-                </tr>
-                <tr>
-                    <td><span>Login Name:</span></td>
-                    <td><input class="easyui-validatebox" name="login_name" style="width: 100%"
-                        data-options="required:true, validType:'length[1,40]'"></td>
-                </tr>
-                <tr>
-                    <td><span>Is Admin:</span></td>
-                    <td><input class="easyui-switchbutton" name="admin" data-options="onText:'Yes',offText:'No'" /></td>
-                </tr>
-                <tr>
-                    <td><span>Is Disabled:</span></td>
-                    <td><input class="easyui-switchbutton" name="disabled" data-options="onText:'Yes',offText:'No'" /></td>
-                </tr>
-            </table>
-            <input id="inputUpdateUserPwdMd5" type="hidden" name="pwd_md5">
-        </form>
-        <table>
-            <tr>
-                <th style="width: 110px"></th>
-                <th></th>
-            </tr>
-            <tr>
-                <td><span>Reset Password:</span></td>
-                <td><input class="easyui-passwordbox" prompt="Empty for no change" name="password"
-                    style="width: 100%" data-options="required: false"></td>
-            </tr>
-            <tr>
-                <td><span>Retype Password:</span></td>
-                <td><input class="easyui-passwordbox" prompt="Empty for no change" name="retype-password"
-                    style="width: 100%" data-options="required: false"></td>
-            </tr>
-        </table>
-        <div style="text-align: center; padding: 20px 0 0 0;">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitFormUpdateUser()" style="width: 80px"><span>Submit</span></a>
-        </div>
     </div>
 
 

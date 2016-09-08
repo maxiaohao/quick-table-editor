@@ -1,23 +1,35 @@
 'use strict';
 
+if ($.fn.window) {
+    $.fn.window.defaults.border = 'thin';
+}
+
+if ($.messager) {
+    $.messager.defaults.border = 'thin';
+}
+
 $(function() {
 
-    $("#windowCreateUser").window({
+    $("#windowUserDetails").dialog({
         modal : true,
         closed : true,
         minimizable : false,
         maximizable : false,
         collapsible : false,
-        border : 'thin'
-    });
-
-    $("#windowUpdateUser").window({
-        modal : true,
-        closed : true,
-        minimizable : false,
-        maximizable : false,
-        collapsible : false,
-        border : 'thin'
+        // border : 'thin',
+        buttons : [ {
+            text : 'Submit',
+            iconCls : 'icon-ok',
+            handler : function() {
+                $('#formUser').form('submit', {});
+            }
+        }, {
+            text : 'Cancel',
+            iconCls : 'icon-cancel',
+            handler : function() {
+                $("#windowUserDetails").window('close');
+            }
+        } ]
     });
 
     var toolbar = [ {
@@ -30,20 +42,26 @@ $(function() {
         text : 'Create User',
         iconCls : 'icon-add',
         handler : function() {
-            $("#windowCreateUser").window('open');
+            openWindowUserDetails('create');
+
         }
     }, {
+        id : 'btnEdit',
         text : 'Edit Selected User',
         iconCls : 'icon-edit',
         handler : function() {
-            $("#windowModifyUser").window('open');
-        }
+            var selUser = $('#gridUsers').datagrid('getSelected');
+            $('#formUser').form('load', selUser);
+            openWindowUserDetails('update');
+        },
+        disabled : true
     }, {
         text : 'Delete Selected User',
-        iconCls : 'icon-cancel',
+        iconCls : 'icon-remove',
         handler : function() {
 
-        }
+        },
+        style : 'text-align:right'
     } ];
 
     $('#gridUsers').datagrid({
@@ -51,17 +69,17 @@ $(function() {
         rownumbers : false,
         singleSelect : true,
         height : '300px',
-        url : '',
-        method : 'get',
+        url : 'admin-crud?model=user&action=read', //$.evalJSON( encoded )
+        method : 'post',
         columns : [ [ {
             field : 'user_id',
             title : 'User ID',
-            width : 100,
+            width : 70,
             align : 'left'
         }, {
-            field : 'user_name',
-            title : 'User Name',
-            width : 100,
+            field : 'login_name',
+            title : 'Login Name',
+            width : 170,
             align : 'left'
         }, {
             field : 'admin',
@@ -73,73 +91,53 @@ $(function() {
             title : 'Is Disabled',
             width : 100,
             align : 'center'
-        } ] ]
+        } ] ],
+        onSelect : function(index, row) {
+            $("#btnEdit").prop({
+                disabled : false
+            });
+        }
     });
 
-    $('#formCreateUser').form({
-        url : 'admin-crud',
-        queryParams : {
-            model : 'user',
-            action : 'create'
-        },
-        onSubmit : function() {
-            var fieldsValid = $('#formCreateUser').form('enableValidation').form('validate');
-            if (!fieldsValid) {
-                return false;
-            }
-            var pass1 = $("#windowCreateUser input[name='password']").val();
-            var pass2 = $("#windowCreateUser input[name='retype-password']").val();
-            if (!pass1 || !pass2) {
-                alert('Passwords should not be empty!');
-                return false;
-            }
-            if (pass1 !== pass2) {
-                alert('The two passwords you entered don\'t match!');
-                return false;
-            }
-            $("#inputCreateUserPwdMd5").val(md5(pass1).toUpperCase());
-            return true;
-        },
-        success : function(data) {
-            // alert(data));
-        }
-    });
-    
-    $('#formUpdateUser').form({
-        url : 'admin-crud',
-        queryParams : {
-            model : 'user',
-            action : 'update'
-        },
-        onSubmit : function() {
-            var fieldsValid = $('#formUpdateUser').form('enableValidation').form('validate');
-            if (!fieldsValid) {
-                return false;
-            }
-            var pass1 = $("#windowUpdateUser input[name='password']").val();
-            var pass2 = $("#windowUpdateUser input[name='retype-password']").val();
-            if (!pass1 || !pass2) {
-                alert('Passwords should not be empty!');
-                return false;
-            }
-            if (pass1 !== pass2) {
-                alert('The two passwords you entered don\'t match!');
-                return false;
-            }
-            $("#inputUpdateUserPwdMd5").val(md5(pass1).toUpperCase());
-            return true;
-        },
-        success : function(data) {
-            // alert(data));
-        }
-    });
+    $('#formUser').form({});
 
 });
 
-function submitFormCreateUser() {
-    $('#formCreateUser').form('submit', {});
-}
-
-function submitFormUpdateUser() {
-    $('#formUpdateUser').form('submit', {});
+function openWindowUserDetails(action) {
+    $("#windowUserDetails").window({
+        title : 'create' === action ? 'Create New User' : 'Edit User'
+    });
+    $('#formUser').form({
+        url : 'admin-crud',
+        queryParams : {
+            model : 'user',
+            action : action
+        },
+        onSubmit : function() {
+            var fieldsValid = $(this).form('enableValidation').form('validate');
+            if (!fieldsValid) {
+                return false;
+            }
+            var pass1 = $("#windowUserDetails input[name='password']").val();
+            var pass2 = $("#windowUserDetails input[name='retype-password']").val();
+            if ('create' === action || ('update' === action && (pass1 || pass2))) {
+                if ('create' === action && (!pass1 && !pass2)) {
+                    $.messager.alert('Invalid Password', 'Password should not be empty!', 'error');
+                    return false;
+                }
+                if (pass1 !== pass2) {
+                    $.messager.alert('Invalid Password', 'The two passwords you entered don\'t match!', 'error');
+                    return false;
+                }
+                $("#inputHiddenPwdMd5").val(md5(pass1).toUpperCase());
+            } else {
+                $("#inputHiddenPwdMd5").val(null);
+            }
+            return true;
+        },
+        success : function(data) {
+            // alert(data));
+        }
+    });
+    $("#windowUserDetails").window('open');
 }
