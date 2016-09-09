@@ -2,11 +2,25 @@
 
 <web-app>
     <display-name>quick-table-editor</display-name>
+    
+    <filter>
+        <description>
+        </description>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.ct.ks.bsc.qte.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>com.ct.ks.bsc.qte.listener.AppListener</listener-class>
+    </listener>
 
     <servlet>
         <description>
         </description>
-        <display-name>AdminCrudServlet</display-name>
         <servlet-name>AdminCrudServlet</servlet-name>
         <servlet-class>com.ct.ks.bsc.qte.servlet.AdminCrudServlet</servlet-class>
     </servlet>
@@ -14,6 +28,10 @@
         <servlet-name>AdminCrudServlet</servlet-name>
         <url-pattern>/admin/admin-crud</url-pattern>
     </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
