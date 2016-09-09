@@ -7,6 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.ct.ks.bsc.qte.core.MasterCrudHandler;
+import com.ct.ks.bsc.qte.model.User;
+import com.ct.ks.bsc.qte.util.CrudResult;
+import com.ct.ks.bsc.qte.util.JsonUtils;
+
 /**
  * Servlet implementation class AdminCrudServlet
  */
@@ -20,7 +27,6 @@ public class AdminCrudServlet extends HttpServlet {
      */
     public AdminCrudServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -29,22 +35,35 @@ public class AdminCrudServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/json");
+
         String model = request.getParameter("model");
         String action = request.getParameter("action");
-        if ("user".equalsIgnoreCase(model)) {
-            String userId = request.getParameter("user_id");
-            if (action.equalsIgnoreCase("create")) {
+        String data = request.getParameter("json_data");
 
+        //System.out.println("data == [" + request.getCharacterEncoding() + "]" + data);
+
+        CrudResult ret = null;
+
+        if ("user".equalsIgnoreCase(model)) {
+            long userId = NumberUtils.toLong(request.getParameter("user_id"));
+            User user = JsonUtils.jsonToObject(data, User.class);
+            if (action.equalsIgnoreCase("create")) {
+                ret = MasterCrudHandler.getInstance().createUser(user);
             } else if (action.equalsIgnoreCase("read")) {
-                if (null == userId) {
-                    // read all
+                if (0 == userId) {
+                    // no id specified, read all
+                    ret = MasterCrudHandler.getInstance().getUsers();
                 } else {
                     // read one
+                    ret = MasterCrudHandler.getInstance().getUser(userId);
                 }
             } else if (action.equalsIgnoreCase("update")) {
-
+                ret = MasterCrudHandler.getInstance().updateUser(userId, user);
             } else if (action.equalsIgnoreCase("delete")) {
-
+                ret = MasterCrudHandler.getInstance().deleteUser(userId);
             }
 
         } else if ("QteDataSource".equalsIgnoreCase(model)) {
@@ -52,6 +71,9 @@ public class AdminCrudServlet extends HttpServlet {
         } else if ("table".equalsIgnoreCase(model)) {
 
         }
+
+        JsonUtils.writeAsJson(response.getWriter(), ret);
+
     }
 
 

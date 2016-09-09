@@ -7,7 +7,7 @@ public class User {
     String user_name;
     String pwd_md5; // not in db model
     String salt;
-    String salted_md5; // salted_md5 = upper(md5(user_name + upper(pwd_md5) + salt))
+    String salted_md5; // salted_md5 = upper(md5(upper(pwd_md5) + salt))
     boolean admin;
     boolean disabled;
 

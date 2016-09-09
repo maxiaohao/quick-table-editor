@@ -1,7 +1,11 @@
 package com.ct.ks.bsc.qte.core;
 
+import java.sql.Connection;
 import java.util.List;
 
+import org.apache.commons.dbutils.DbUtils;
+
+import com.ct.ks.bsc.qte.db.DataSourcePool;
 import com.ct.ks.bsc.qte.db.SqlRunner;
 import com.ct.ks.bsc.qte.model.QteDataSource;
 import com.ct.ks.bsc.qte.model.User;
@@ -29,21 +33,55 @@ public class MasterCrudHandler {
     // ************************************************************************
     // ************************************************************************
 
+    private CrudResult verfiyUserBeforeCreateOrUpdate(User user) {
+        if (user == null) {
+            return new CrudResult(false, "bad request: user is null!");
+        } else if (user.getLogin_name().length() < 1 || user.getLogin_name().length() > 20) {
+            return new CrudResult(false, "length of login name should be between 1 and 20");
+        } else if (user.getUser_name() != null && user.getUser_name().length() > 100) {
+            return new CrudResult(false, "max length of user name should not be over 100");
+        }
+
+        try {
+            int cnt = ((Number) SqlRunner.getMasterInstance().query1stCell(
+                    "select count(*) from qte_t_user where login_name=?", user.getLogin_name())).intValue();
+            if (cnt > 0) {
+                return new CrudResult(false, "Login name '" + user.getLogin_name()
+                        + "' is already taken by some user," + " please try another name.");
+            }
+        } catch (Exception e1) {
+            return new CrudResult(false, "error occurred while verifying existing users in master database: "
+                    + e1.getLocalizedMessage());
+        }
+        return new CrudResult(true);
+    }
+
+
     public CrudResult createUser(User user) {
+        CrudResult verfityResult = verfiyUserBeforeCreateOrUpdate(user);
+        if (!verfityResult.isSuccess()) {
+            return verfityResult;
+        }
+        if (user.getPwd_md5() == null || user.getPwd_md5().length() != 32) {
+            return new CrudResult(false,
+                    "bad request: no valid password md5 value found, the md5 passed from server is: "
+                            + user.getPwd_md5());
+        }
         try {
             String newSalt = StringUtils.getRandomCapitalLetters(4);
-            // salted_md5 = upper(md5(user_name + upper(pwd_md5) + salt))
-            String saltedMd5 = StringUtils.md5(user.getLogin_name() + (user.getPwd_md5() + "").toUpperCase() + newSalt);
+            // salted_md5 = upper(md5(upper(pwd_md5) + salt))
+            String saltedMd5 = StringUtils.md5((user.getPwd_md5() + "").toUpperCase() + newSalt);
             SqlRunner
                     .getMasterInstance()
                     .exec(
-                            "insert into QTE_T_USER (LOGIN_NAME, USER_NAME, SALT, SALTED_MD5, IS_ADMIN, IS_DISABLED)"
+                            "insert into QTE_T_USER (LOGIN_NAME, USER_NAME, SALT, SALTED_MD5, ADMIN, DISABLED)"
                                     + " values (?,?,?,?,?,?)", user.getLogin_name(), user.getUser_name(), newSalt,
                             saltedMd5, user.isAdmin(), user.isDisabled());
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while creating new user: " + e.getLocalizedMessage());
+            return new CrudResult(false, "error occurred while creating new user in master database: "
+                    + e.getLocalizedMessage());
         }
-        return new CrudResult(true);
+        return new CrudResult(true, "New user (login name=" + user.getLogin_name() + ") created successfully.");
     }
 
 
@@ -54,7 +92,7 @@ public class MasterCrudHandler {
                     userId);
             return new CrudResult(true, user);
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while getting user (ID=" + userId + "): "
+            return new CrudResult(false, "error occurred while getting user from master database (ID=" + userId + "): "
                     + e.getLocalizedMessage());
         }
     }
@@ -72,15 +110,18 @@ public class MasterCrudHandler {
 
 
     public CrudResult updateUser(long userId, User user) {
+        CrudResult verfityResult = verfiyUserBeforeCreateOrUpdate(user);
+        if (!verfityResult.isSuccess()) {
+            return verfityResult;
+        }
         try {
             int rows = 0;
             if (user.getPwd_md5() != null || user.getPwd_md5().equals("")) {
                 rows = SqlRunner
                         .getMasterInstance()
-                        .exec(
-                                "update QTE_T_USER set login_name=?, user_name=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
+                        .exec("update QTE_T_USER set login_name=?, user_name=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
                                 user.getLogin_name(), user.getUser_name(),
-                                StringUtils.md5(user.getLogin_name() + (user.getPwd_md5() + "").toUpperCase()
+                                StringUtils.md5((user.getPwd_md5() + "").toUpperCase()
                                         + user.getSalt()), user.isAdmin(), user.isDisabled(), userId);
             } else {
                 rows = SqlRunner.getMasterInstance().exec(
@@ -88,26 +129,34 @@ public class MasterCrudHandler {
                         user.getLogin_name(), user.getUser_name(), user.isAdmin(), user.isDisabled(), userId);
             }
             if (rows > 0) {
-                return new CrudResult(true);
+                return new CrudResult(true, "User (ID=" + userId + ") updated successfully.");
             } else {
                 return new CrudResult(false, "no user with userId " + userId + " found");
             }
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while getting users: " + e.getLocalizedMessage());
+            return new CrudResult(false, "error occurred while getting users from master database: "
+                    + e.getLocalizedMessage());
         }
     }
 
 
     public CrudResult deleteUser(long userId) {
+        Connection conn = null;
         try {
-            int rows = SqlRunner.getMasterInstance().exec("delete from QTE_T_USER where user_id=?", userId);
+            conn = DataSourcePool.getMasterConnection();
+            SqlRunner.getMasterInstance().exec(conn, "delete from QTE_T_T2U where user_id=?", userId);
+            int rows = SqlRunner.getMasterInstance().exec(conn, "delete from QTE_T_USER where user_id=?", userId);
+            conn.commit();
             if (rows > 0) {
                 return new CrudResult(true);
             } else {
                 return new CrudResult(false, "no user with userId " + userId + " found");
             }
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while getting users: " + e.getLocalizedMessage());
+            return new CrudResult(false, "error occurred while deleting user from master database: "
+                    + e.getLocalizedMessage());
+        } finally {
+            DbUtils.closeQuietly(conn);
         }
     }
 
