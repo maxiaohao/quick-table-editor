@@ -10,7 +10,9 @@
  -->
 <script type="text/javascript" src="../third-party/jquery-easyui/jquery.min.js"></script>
 <script type="text/javascript" src="../third-party/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../third-party/json2/json2.js"></script>
 <script type="text/javascript" src="../third-party/JavaScript-MD5/js/md5.min.js"></script>
+
 <script type="text/javascript" src="js/user.js"></script>
 
 </head>
@@ -22,6 +24,8 @@
         style="width: 100%; max-width: 400px; padding: 20px;">
 
         <form id="formUser" method="post">
+            <input type="hidden" name="user_id"> <input type="hidden" name="pwd_md5"> <input
+                type="hidden" name="json_data">
             <table>
                 <thead>
                     <tr>
@@ -31,23 +35,25 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span>Login Name:</span></td>
+                        <td><span>Login ID:</span></td>
                         <td><input class="easyui-textbox" name="login_name" style="width: 200px"
                             data-options="iconCls:'icon-man', required:true, prompt: 'Unique login name'"></td>
                     </tr>
                     <tr>
+                        <td><span>User Name:</span></td>
+                        <td><input class="easyui-textbox" name="user_name" style="width: 200px"
+                            data-options="required: false, prompt: 'User Name (Optional)'"></td>
+                    </tr>
+                    <tr>
                         <td><span>Is Admin:</span></td>
-                        <td><input class="easyui-switchbutton" name="admin"
-                            data-options="onText:'Yes',offText:'No'" /></td>
+                        <td><input type="checkbox" name="admin" /><span>Admin</span></td>
                     </tr>
                     <tr>
                         <td><span>Is Disabled:</span></td>
-                        <td><input class="easyui-switchbutton" name="disabled"
-                            data-options="onText:'Yes',offText:'No'" /></td>
+                        <td><input type="checkbox" name="disabled" /><span>Disabled</span></td>
                     </tr>
                 </tbody>
             </table>
-            <input id="inputHiddenPwdMd5" type="hidden" name="pwd_md5">
         </form>
         <table>
             <thead>
