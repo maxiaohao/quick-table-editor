@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ct.ks.bsc.qte.core.MasterCrudHandler;
-import com.ct.ks.bsc.qte.model.User;
-import com.ct.ks.bsc.qte.util.CrudResult;
+import com.ct.ks.bsc.qte.core.AuthHandler;
 
 /**
  * Authenticate if the current user is a basic user which is configured in master db, otherwise, return a 401 page.
@@ -49,9 +47,7 @@ public class UserAuthenticationFilter implements Filter {
             log.error("Failed to get userPrincipal from request, probable cause is lack of preceding "
                     + "HttpServletRequestWrapperFilter configured in web.xml.");
         } else {
-            CrudResult ret = MasterCrudHandler.getInstance().getUser(prcpl.getName());
-            if (null != ret && null != ret.getData() && null != ((User) ret.getData())
-                    && ((User) ret.getData()).isAdmin()) {
+            if (AuthHandler.getInstance().isAuthenticated(prcpl.getName())) {
                 chain.doFilter(request, response);
             } else {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ct.ks.bsc.qte.core.Constants;
@@ -34,12 +35,13 @@ public class HttpServletRequestWrapperFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         HttpSession session = ((HttpServletRequest) request).getSession();
-        String loginName = (String) session.getAttribute(Constants.HTTP_SESSION_ATTR_LOGIN_NAME);
+        String loginName = (String) session.getAttribute(Constants.SESSION_ATTR_AUTHENTICATED_LOGIN_NAME);
         if (loginName != null) {
             chain.doFilter(new QteAuthHttpServletRequestWrapper((HttpServletRequest) request, new QteUserPrincipal(
                     loginName)), response);
         } else {
-            request.getRequestDispatcher("login").forward(request, response);
+            //request.getRequestDispatcher("/login.html").forward(request, response);
+           (( HttpServletResponse)response).sendRedirect(request.getServletContext().getContextPath()+"/login.html");
         }
     }
 

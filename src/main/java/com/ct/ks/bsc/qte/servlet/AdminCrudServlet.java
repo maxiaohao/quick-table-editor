@@ -14,9 +14,6 @@ import com.ct.ks.bsc.qte.model.User;
 import com.ct.ks.bsc.qte.util.CrudResult;
 import com.ct.ks.bsc.qte.util.JsonUtils;
 
-/**
- * Servlet implementation class AdminCrudServlet
- */
 public class AdminCrudServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -36,12 +33,9 @@ public class AdminCrudServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/json");
-
         String model = request.getParameter("model");
         String action = request.getParameter("action");
         String data = request.getParameter("json_data");
-
-        // System.out.println("data == [" + request.getCharacterEncoding() + "]" + data);
 
         CrudResult ret = null;
 

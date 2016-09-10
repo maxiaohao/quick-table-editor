@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" type="text/css" href="third-party/jquery-easyui/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="third-party/jquery-easyui/themes/icon.css">
+<script type="text/javascript" src="third-party/jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="third-party/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="third-party/JavaScript-MD5/js/md5.min.js"></script>
+
+<script type="text/javascript" src="js/login.js"></script>
+
+<style type="text/css">
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -200px;
+}
+</style>
+</head>
+<body>
+    <div id="dd" class="easyui-dialog" title="Welcome to quick-table-editor!" style="width: 310px; padding: 20px"
+        data-options="resizable:false, border: 'thin', modal:false, closable: false, draggable: false, buttons:'#buttons'">
+        <form id="loginForm" method="post">
+            <div style="margin-bottom: 10px">
+                <input class="easyui-textbox" name="name" style="width: 260px;"
+                    data-options="label:'Login Name:',required:true">
+            </div>
+            <div style="margin-bottom: 0px">
+                <input class="easyui-passwordbox" name="password" style="width: 260px"
+                    data-options="label:'Password:',required:true">
+            </div>
+            <div id="buttons" style="text-align: center">
+                <a id="loginButton" style="width: 80px" href="#" class="easyui-linkbutton">Login</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

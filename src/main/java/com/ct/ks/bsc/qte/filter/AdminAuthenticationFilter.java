@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ct.ks.bsc.qte.core.MasterCrudHandler;
-import com.ct.ks.bsc.qte.model.User;
-import com.ct.ks.bsc.qte.util.CrudResult;
+import com.ct.ks.bsc.qte.core.AuthHandler;
 
 /**
  * Authenticate if the current user is allowed to access admin resources, otherwise, return a 401 page
@@ -39,16 +37,14 @@ public class AdminAuthenticationFilter implements Filter {
             ServletException {
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpServletResponse resp = ((HttpServletResponse) response);
-        Principal p = req.getUserPrincipal();
+        Principal prcpl = req.getUserPrincipal();
         PrintWriter pw = resp.getWriter();
-        if (null == p) {
+        if (null == prcpl) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             pw.print("<h2>500 Server Internal Error</h2><p>Refer to the server log for more information.</p>");
             log.error("Failed to get userPrincipal from request, probable cause is lack of HttpServletRequestWrapperFilter in web.xml.");
         } else {
-            CrudResult ret = MasterCrudHandler.getInstance().getUser(p.getName());
-            User user = null == ret ? null : (User) ret.getData();
-            if (null != user && user.isAdmin()) {
+            if (AuthHandler.getInstance().isAdmin(prcpl.getName())) {
                 chain.doFilter(request, response);
             } else {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

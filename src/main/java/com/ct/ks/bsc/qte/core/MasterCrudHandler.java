@@ -115,7 +115,11 @@ public class MasterCrudHandler {
         try {
             User user = SqlRunner.getMasterInstance().queryObj(User.class,
                     "select * from QTE_T_USER where USER_ID=?", userId);
-            return new CrudResult(true, user);
+            if (null != user) {
+                return new CrudResult(true, user);
+            } else {
+                return new CrudResult(false, "No user with user ID " + userId + " found.");
+            }
         } catch (Exception e) {
             return new CrudResult(false, "error occurred while getting user from master database (USER_ID=" + userId
                     + "): "
@@ -128,7 +132,11 @@ public class MasterCrudHandler {
         try {
             User user = SqlRunner.getMasterInstance().queryObj(User.class,
                     "select * from QTE_T_USER where LOGIN_NAME=?", loginName);
-            return new CrudResult(true, user);
+            if (null != user) {
+                return new CrudResult(true, user);
+            } else {
+                return new CrudResult(false, "No user with login name '" + loginName + "' found.");
+            }
         } catch (Exception e) {
             return new CrudResult(false, "error occurred while getting user from master database (LOGIN_NAME="
                     + loginName + "): "
