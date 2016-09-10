@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ct.ks.bsc.qte.core.Constants;
 import com.ct.ks.bsc.qte.core.MasterCrudHandler;
@@ -22,7 +23,7 @@ import com.ct.ks.bsc.qte.model.QteDataSource;
 
 public class DataSourcePool {
 
-    private static Logger log = org.slf4j.LoggerFactory.getLogger(DataSourcePool.class);
+    private static Logger log = LoggerFactory.getLogger(DataSourcePool.class);
 
     private static final Map<String, DataSource> dss = new HashMap<>();
     private static final String DBCP_PROPERTIES_FILENAME = "dbcp.properties";

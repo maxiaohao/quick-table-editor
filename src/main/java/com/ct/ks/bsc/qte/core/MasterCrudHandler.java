@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ct.ks.bsc.qte.db.DataSourcePool;
 import com.ct.ks.bsc.qte.db.SqlRunner;
@@ -15,7 +16,7 @@ import com.ct.ks.bsc.qte.util.StringUtils;
 
 public class MasterCrudHandler {
 
-    private Logger log = org.slf4j.LoggerFactory.getLogger(MasterCrudHandler.class);
+    private Logger log = LoggerFactory.getLogger(MasterCrudHandler.class);
 
     private static final MasterCrudHandler inst = new MasterCrudHandler();
 
@@ -113,11 +114,24 @@ public class MasterCrudHandler {
     public CrudResult getUser(long userId) {
         try {
             User user = SqlRunner.getMasterInstance().queryObj(User.class,
-                    "select * from QTE_T_USER where USER_ID=?",
-                    userId);
+                    "select * from QTE_T_USER where USER_ID=?", userId);
             return new CrudResult(true, user);
         } catch (Exception e) {
-            return new CrudResult(false, "error occurred while getting user from master database (ID=" + userId + "): "
+            return new CrudResult(false, "error occurred while getting user from master database (USER_ID=" + userId
+                    + "): "
+                    + e.getLocalizedMessage());
+        }
+    }
+
+
+    public CrudResult getUser(String loginName) {
+        try {
+            User user = SqlRunner.getMasterInstance().queryObj(User.class,
+                    "select * from QTE_T_USER where LOGIN_NAME=?", loginName);
+            return new CrudResult(true, user);
+        } catch (Exception e) {
+            return new CrudResult(false, "error occurred while getting user from master database (LOGIN_NAME="
+                    + loginName + "): "
                     + e.getLocalizedMessage());
         }
     }

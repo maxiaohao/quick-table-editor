@@ -35,15 +35,13 @@ public class AdminCrudServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/json");
 
         String model = request.getParameter("model");
         String action = request.getParameter("action");
         String data = request.getParameter("json_data");
 
-        //System.out.println("data == [" + request.getCharacterEncoding() + "]" + data);
+        // System.out.println("data == [" + request.getCharacterEncoding() + "]" + data);
 
         CrudResult ret = null;
 

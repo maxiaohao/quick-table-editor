@@ -2,17 +2,56 @@
 
 <web-app>
     <display-name>quick-table-editor</display-name>
-    
+
     <filter>
         <description>
         </description>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>com.ct.ks.bsc.qte.filter.AuthenticationFilter</filter-class>
+        <display-name>SetCharacterEncodingFilter</display-name>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <filter-class>com.ct.ks.bsc.qte.filter.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
     </filter>
+    <filter>
+        <description>
+        </description>
+        <display-name>HttpServletRequestWrapperFilter</display-name>
+        <filter-name>HttpServletRequestWrapperFilter</filter-name>
+        <filter-class>com.ct.ks.bsc.qte.filter.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+    <filter>
+        <description>
+        </description>
+        <filter-name>UserAuthenticationFilter</filter-name>
+        <filter-class>com.ct.ks.bsc.qte.filter.UserAuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <description>
+        </description>
+        <display-name>AdminAuthenticationFilter</display-name>
+        <filter-name>AdminAuthenticationFilter</filter-name>
+        <filter-class>com.ct.ks.bsc.qte.filter.AdminAuthenticationFilter</filter-class>
+    </filter>
+
     <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>HttpServletRequestWrapperFilter</filter-name>
+        <url-pattern>/authenticated/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>UserAuthenticationFilter</filter-name>
+        <url-pattern>/authenticated/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminAuthenticationFilter</filter-name>
+        <url-pattern>/authenticated/admin/*</url-pattern>
+    </filter-mapping>
+
 
     <listener>
         <listener-class>com.ct.ks.bsc.qte.listener.AppListener</listener-class>
@@ -24,13 +63,24 @@
         <servlet-name>AdminCrudServlet</servlet-name>
         <servlet-class>com.ct.ks.bsc.qte.servlet.AdminCrudServlet</servlet-class>
     </servlet>
+    <servlet>
+    	<description>
+    	</description>
+    	<display-name>LoginServlet</display-name>
+    	<servlet-name>LoginServlet</servlet-name>
+    	<servlet-class>com.ct.ks.bsc.qte.servlet.LoginServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminCrudServlet</servlet-name>
-        <url-pattern>/admin/admin-crud</url-pattern>
+        <url-pattern>/authenticated/admin/admin-crud</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>LoginServlet</servlet-name>
+    	<url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
 
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>180</session-timeout>
     </session-config>
 
     <welcome-file-list>
