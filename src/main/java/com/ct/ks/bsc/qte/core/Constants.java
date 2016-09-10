@@ -8,10 +8,10 @@ package com.ct.ks.bsc.qte.core;
 public interface Constants {
 
     String CONFIG_H2_JDBC_DRIVER = "org.h2.Driver";
-    String CONFIG_H2_JDBC_URL = "jdbc:h2:~/.quick-table-editor/config";
     String EXTRA_JDBC_LIB_DIR = "~/.quick-table-editor/jdbc";
+    String CONFIG_H2_DB_FILE = "~/.quick-table-editor/master";
+    String CONFIG_H2_JDBC_URL = "jdbc:h2:" + CONFIG_H2_DB_FILE;
     String MASTER_DATASOURCE_NAME = "qte-master-db";
-    String SQL_GET_TABLE_COUNT = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC'";
     String INIT_DB_SQL_FILENAME = "init-db.sql";
     String CONFIG_TABLE_USER = "QTE_T_USER";
     String CONFIG_TABLE_CONN = "QTE_T_DATASOURCE";

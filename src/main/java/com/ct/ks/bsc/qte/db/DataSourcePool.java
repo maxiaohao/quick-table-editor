@@ -1,15 +1,20 @@
 package com.ct.ks.bsc.qte.db;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
+import org.slf4j.Logger;
 
 import com.ct.ks.bsc.qte.core.Constants;
 import com.ct.ks.bsc.qte.core.MasterCrudHandler;
@@ -17,7 +22,9 @@ import com.ct.ks.bsc.qte.model.QteDataSource;
 
 public class DataSourcePool {
 
-    private static final Map<String, DataSource> dss = new HashMap<String, DataSource>();
+    private static Logger log = org.slf4j.LoggerFactory.getLogger(DataSourcePool.class);
+
+    private static final Map<String, DataSource> dss = new HashMap<>();
     private static final String DBCP_PROPERTIES_FILENAME = "dbcp.properties";
 
 
@@ -38,6 +45,8 @@ public class DataSourcePool {
             p.setProperty("password", qteDs.getPassword());
             ds = BasicDataSourceFactory.createDataSource(p);
             dss.put(dsName, ds);
+            log.warn("Datasource '{}'(jdbc driver='{}', url='{}') created.", dsName, qteDs.getJdbc_class(),
+                    qteDs.getJdbc_url());
         }
         return ds;
     }
@@ -52,6 +61,8 @@ public class DataSourcePool {
             p.setProperty("url", Constants.CONFIG_H2_JDBC_URL);
             ds = BasicDataSourceFactory.createDataSource(p);
             dss.put(Constants.MASTER_DATASOURCE_NAME, ds);
+            log.warn("Datasource '{}' (driver='{}', url='{}') created.", Constants.MASTER_DATASOURCE_NAME,
+                    Constants.CONFIG_H2_JDBC_DRIVER, Constants.CONFIG_H2_JDBC_URL);
         }
         return ds;
     }
@@ -67,11 +78,14 @@ public class DataSourcePool {
     }
 
 
-    public static void close(String dsName) throws SQLException {
+    public static void close(String dsName) {
         DataSource ds = dss.get(dsName);
         if (null != ds) {
             try {
                 ((BasicDataSource) ds).close();
+                log.warn("Datasource '{}' closed.", dsName);
+            } catch (SQLException e) {
+                log.error("Error occurred while closing datasource '{}': {}", dsName, e.getLocalizedMessage());
             } finally {
                 dss.remove(dsName);
             }
@@ -79,9 +93,28 @@ public class DataSourcePool {
     }
 
 
-    public static void closeAll() throws SQLException {
-        for (DataSource ds : dss.values()) {
-            ((BasicDataSource) ds).close();
+    public static void shutdown() {
+        Set<String> jdbcDriverUrls = new HashSet<>();
+        for (String dsName : dss.keySet()) {
+            try {
+                BasicDataSource ds = (BasicDataSource) dss.get(dsName);
+                jdbcDriverUrls.add(ds.getUrl());
+                ds.close();
+                log.warn("Datasource '{}' closed.", dsName);
+            } catch (SQLException e) {
+                log.error("Error occurred while closing datasource '{}': {}", dsName, e.getLocalizedMessage());
+            }
+        }
+        // also deregister all the jdbc drivers loaded by pool
+        for (String url : jdbcDriverUrls) {
+            try {
+                Driver drv = DriverManager.getDriver(url);
+                DriverManager.deregisterDriver(drv);
+                log.warn("JDBC driver '{}' (url:'{}') deregistered.", drv.getClass().getName(), url);
+            } catch (SQLException e) {
+                log.error("Error occurred while deregistering JDBC driver: '{}', error: {}", url,
+                        e.getLocalizedMessage());
+            }
         }
         dss.clear();
     }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.apache.commons.dbutils.DbUtils;
+import org.slf4j.Logger;
 
 import com.ct.ks.bsc.qte.db.DataSourcePool;
 import com.ct.ks.bsc.qte.db.SqlRunner;
@@ -13,6 +14,8 @@ import com.ct.ks.bsc.qte.util.CrudResult;
 import com.ct.ks.bsc.qte.util.StringUtils;
 
 public class MasterCrudHandler {
+
+    private Logger log = org.slf4j.LoggerFactory.getLogger(MasterCrudHandler.class);
 
     private static final MasterCrudHandler inst = new MasterCrudHandler();
 
@@ -24,6 +27,28 @@ public class MasterCrudHandler {
 
     public static MasterCrudHandler getInstance() {
         return inst;
+    }
+
+
+    /**
+     * init h2 config db if not exist
+     */
+    public void initMasterDbIfNotExist() {
+        try {
+            SqlRunner runner = SqlRunner.getMasterInstance();
+            Number cnt = (Number) runner
+                    .query1stCell("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC'");
+            if (cnt.intValue() == 0) {
+                log.warn("No master database found and now initialize a new one ...");
+                runner.exec("RUNSCRIPT FROM 'classpath:" + Constants.INIT_DB_SQL_FILENAME + "'");
+                log.warn("Master database initialzed successfully ({}.h2.db)", Constants.CONFIG_H2_DB_FILE);
+            } else {
+                log.warn("Found existing master database '{}.h2.db'", Constants.CONFIG_H2_DB_FILE);
+            }
+        } catch (Exception e) {
+            log.error("Fatal error while initializing new master database ({}.h2.db), error: {}"
+                    , Constants.CONFIG_H2_DB_FILE, e.getLocalizedMessage());
+        }
     }
 
 
