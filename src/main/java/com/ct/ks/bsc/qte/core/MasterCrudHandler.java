@@ -70,7 +70,8 @@ public class MasterCrudHandler {
 
         try {
             int cnt = ((Number) SqlRunner.getMasterInstance().query1stCell(
-                    "select count(*) from qte_t_user where login_name=?", user.getLogin_name())).intValue();
+                    "select count(*) from qte_t_user where login_name=? and user_id<>?", user.getLogin_name(),
+                    user.getUser_id())).intValue();
             if (cnt > 0) {
                 return new CrudResult(false, "Login name '" + user.getLogin_name()
                         + "' is already taken by some user," + " please try another name.");
@@ -163,22 +164,24 @@ public class MasterCrudHandler {
         }
         try {
             int rows = 0;
-            if (user.getPwd_md5() != null || user.getPwd_md5().equals("")) {
+            boolean changePwd = user.getPwd_md5() != null && !user.getPwd_md5().equals("");
+            if (changePwd) {
                 rows = SqlRunner
                         .getMasterInstance()
-                        .exec("update QTE_T_USER set login_name=?, user_name=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
+                        .exec("update QTE_T_USER set LOGIN_NAME=?, USER_NAME=?, SALTED_MD5=?, ADMIN=?, disabled=? where user_id=?",
                                 user.getLogin_name(), user.getUser_name(),
                                 StringUtils.md5((user.getPwd_md5() + "").toUpperCase()
                                         + user.getSalt()), user.isAdmin(), user.isDisabled(), userId);
             } else {
                 rows = SqlRunner.getMasterInstance().exec(
-                        "update QTE_T_USER set login_name=? user_name=?, ADMIN=?, disabled=? where user_id=?",
+                        "update QTE_T_USER set LOGIN_NAME=?, USER_NAME=?, ADMIN=?, disabled=? where user_id=?",
                         user.getLogin_name(), user.getUser_name(), user.isAdmin(), user.isDisabled(), userId);
             }
             if (rows > 0) {
-                return new CrudResult(true, "User (ID=" + userId + ") updated successfully.");
+                return new CrudResult(true, "User (ID=" + userId + ") updated successfully."
+                        + (changePwd ? " Password has also been changed." : ""));
             } else {
-                return new CrudResult(false, "no user with userId " + userId + " found");
+                return new CrudResult(false, "No user with userId " + userId + " found");
             }
         } catch (Exception e) {
             return new CrudResult(false, "error occurred while getting users from master database: "
@@ -188,6 +191,9 @@ public class MasterCrudHandler {
 
 
     public CrudResult deleteUser(long userId) {
+        if (1 == userId) {
+            return new CrudResult(false, "The default admin (User ID = " + userId + ") is not allowed to be deleted.");
+        }
         Connection conn = null;
         try {
             conn = DataSourcePool.getMasterConnection();
