@@ -38,6 +38,9 @@ public class AuthHandler {
             return false;
         } else {
             User user = (User) result.getData();
+            if (user.isDisabled()) {
+                return false;
+            }
             try {
                 // salted_md5 = upper(md5(upper(pwd_md5) + salt))
                 return StringUtils.md5(pwdMd5.toUpperCase() + user.getSalt()).toUpperCase()
@@ -51,23 +54,26 @@ public class AuthHandler {
     }
 
 
-    public boolean isAuthenticated(String loginName) {
+    public boolean isUser(String loginName) {
         CrudResult result = MasterCrudHandler.getInstance().getUser(loginName);
-        if (null != result && null != result.getData() && null != ((User) result.getData())) {
-            return true;
-        } else {
-            return false;
+        if (null != result) {
+            User user = (User) result.getData();
+            if (null != user && !user.isDisabled()) {
+                return true;
+            }
         }
+        return false;
     }
 
 
     public boolean isAdmin(String loginName) {
         CrudResult result = MasterCrudHandler.getInstance().getUser(loginName);
-        if (null != result && null != result.getData() && null != ((User) result.getData())
-                && ((User) result.getData()).isAdmin()) {
-            return true;
-        } else {
-            return false;
+        if (null != result) {
+            User user = (User) result.getData();
+            if (null != user && !user.isDisabled() && user.isAdmin()) {
+                return true;
+            }
         }
+        return false;
     }
 }

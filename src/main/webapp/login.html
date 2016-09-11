@@ -16,14 +16,15 @@
     <div class="easyui-dialog" title="Welcome to quick-table-editor!" style="width: 320px; padding: 10px 10px 0px 10px"
         data-options="resizable:false, border: 'thin', modal:false, closable: false, draggable: false, buttons:'#buttons'">
         <div style="margin: 20px 8px 10px 8px">
-            <input id="loginName" class="easyui-textbox" name="login_name" style="width: 260px;" data-options="label:'Login Name:'">
+            <input id="loginName" class="easyui-textbox" name="login_name" style="width: 260px;"
+                data-options="label:'Login Name:'">
         </div>
         <div style="margin: 15px 8px 0px 8px">
             <input id="password" class="easyui-passwordbox" name="password" style="width: 260px"
                 data-options="label:'Password:'">
         </div>
         <div id="errMsg" style="text-align: center; margin: 0px 8px 0px 8px; visibility: hidden">
-            <p style="color: red">Incorrect login name or password.</p>
+            <p style="color: red">Incorrect login name or password, or account disabled.</p>
         </div>
         <div id="buttons" style="text-align: center">
             <div id="loginButton" style="width: 80px" class="easyui-linkbutton">Login</div>

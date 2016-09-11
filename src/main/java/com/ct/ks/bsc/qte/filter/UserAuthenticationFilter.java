@@ -43,15 +43,15 @@ public class UserAuthenticationFilter implements Filter {
         PrintWriter pw = resp.getWriter();
         if (null == prcpl || null == prcpl.getName()) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            pw.print("<h2>500 Server Internal Error</h2><p>Refer to the server log for more information.</p>");
+            pw.print("<h1>500 Server Internal Error</h1><p>Refer to the server log for more information.</p>");
             log.error("Failed to get userPrincipal from request, probable cause is lack of preceding "
                     + "HttpServletRequestWrapperFilter configured in web.xml.");
         } else {
-            if (AuthHandler.getInstance().isAuthenticated(prcpl.getName())) {
+            if (AuthHandler.getInstance().isUser(prcpl.getName())) {
                 chain.doFilter(request, response);
             } else {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                pw.print("<h2>401 Server Internal Error</h2><p>You are not authorized to access this page.</p>");
+                pw.print("<h1>401 Unauthorized</h1><p>You are not authorized to access this page.</p>");
             }
         }
     }

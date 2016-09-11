@@ -20,6 +20,9 @@ import com.ct.ks.bsc.qte.core.AuthHandler;
 
 /**
  * Authenticate if the current user is allowed to access admin resources, otherwise, return a 401 page
+ *
+ * @author xma11
+ *
  */
 public class AdminAuthenticationFilter implements Filter {
 
@@ -41,14 +44,14 @@ public class AdminAuthenticationFilter implements Filter {
         PrintWriter pw = resp.getWriter();
         if (null == prcpl) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            pw.print("<h2>500 Server Internal Error</h2><p>Refer to the server log for more information.</p>");
+            pw.print("<h1>500 Server Internal Error</h1><p>Refer to the server log for more information.</p>");
             log.error("Failed to get userPrincipal from request, probable cause is lack of HttpServletRequestWrapperFilter in web.xml.");
         } else {
             if (AuthHandler.getInstance().isAdmin(prcpl.getName())) {
                 chain.doFilter(request, response);
             } else {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                pw.print("<h2>401 Server Internal Error</h2><p>You are not authorized to access this resource.</p>");
+                pw.print("<h1>401 Unauthorized</h1><p>You are not authorized to access this page.</p>");
             }
         }
     }

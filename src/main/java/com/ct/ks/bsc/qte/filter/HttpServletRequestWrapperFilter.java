@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.ct.ks.bsc.qte.core.Constants;
 
 /**
- * If login name is found in session, this filter will wrap it as the user principle into the request, otherwise,
+ * If login name is found in session, this filter will wrap it as the user principle name into the request, otherwise,
  * redirect client to local login page.
  *
  * @author xma11
@@ -40,12 +40,11 @@ public class HttpServletRequestWrapperFilter implements Filter {
             chain.doFilter(new QteAuthHttpServletRequestWrapper((HttpServletRequest) request, new QteUserPrincipal(
                     loginName)), response);
         } else {
-            // request.getRequestDispatcher("/login.html").forward(request, response);
             ((HttpServletResponse) response).sendRedirect(request.getServletContext().getContextPath() + "/login.html");
         }
     }
 
-    public final class QteAuthHttpServletRequestWrapper extends HttpServletRequestWrapper {
+    protected final class QteAuthHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
         private Principal prcpl = null;
 
@@ -68,7 +67,7 @@ public class HttpServletRequestWrapperFilter implements Filter {
         }
     }
 
-    final class QteUserPrincipal implements Principal {
+    protected final class QteUserPrincipal implements Principal {
 
         String nm = null;
 
