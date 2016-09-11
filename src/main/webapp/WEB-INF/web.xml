@@ -64,18 +64,18 @@
         <servlet-class>com.ct.ks.bsc.qte.servlet.AdminCrudServlet</servlet-class>
     </servlet>
     <servlet>
-    	<description>
-    	</description>
-    	<servlet-name>LogInOutServlet</servlet-name>
-    	<servlet-class>com.ct.ks.bsc.qte.servlet.LogInOutServlet</servlet-class>
+        <description>
+        </description>
+        <servlet-name>LogInOutServlet</servlet-name>
+        <servlet-class>com.ct.ks.bsc.qte.servlet.LogInOutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminCrudServlet</servlet-name>
         <url-pattern>/authenticated/admin/admin-crud</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-    	<servlet-name>LogInOutServlet</servlet-name>
-    	<url-pattern>/login</url-pattern>
+        <servlet-name>LogInOutServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
