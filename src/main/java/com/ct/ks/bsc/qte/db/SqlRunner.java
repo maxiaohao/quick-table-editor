@@ -16,7 +16,6 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,8 +87,8 @@ public class SqlRunner {
         Connection conn = DataSourcePool.getConnection(this.dsName);
         try {
             int ret = 0;
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             ret = queryRunner.update(conn, sql, params);
             conn.commit();
             return ret;
@@ -119,8 +118,8 @@ public class SqlRunner {
             throws SQLException {
         if (null != conn) {
             try {
-                log.info("SQL=[" + sql + "],PARAM=["
-                        + StringUtils.join(params, ',') + "]");
+                // log.info("SQL=[" + sql + "],PARAM=["
+                // + StringUtils.join(params, ',') + "]");
                 return queryRunner.update(conn, sql, params);
             } catch (SQLException e) {
                 log.error(e.getMessage());
@@ -145,8 +144,8 @@ public class SqlRunner {
     public int execBatch(String sql, Object[]... params) throws Exception {
         Connection conn = DataSourcePool.getConnection(this.dsName);
         try {
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             int[] cs = queryRunner.batch(conn, sql, params);
             int ret = 0;
             for (int c : cs) {
@@ -180,8 +179,8 @@ public class SqlRunner {
             throws SQLException {
         if (null != conn) {
             try {
-                log.info("SQL=[" + sql + "],PARAM=["
-                        + StringUtils.join(params, ',') + "]");
+                // log.info("SQL=[" + sql + "],PARAM=["
+                // + StringUtils.join(params, ',') + "]");
                 int[] cs = queryRunner.batch(conn, sql, params);
                 int ret = 0;
                 for (int c : cs) {
@@ -216,7 +215,7 @@ public class SqlRunner {
             if (null != sqls) {
                 final int sqlCnt = sqls.size();
                 for (int i = 0; i < sqlCnt; i++) {
-                    log.info("SQL=[" + sqls.get(i) + "]");
+                    // log.info("SQL=[" + sqls.get(i) + "]");
                     ret += queryRunner.update(conn, sqls.get(i));
                 }
             }
@@ -254,8 +253,8 @@ public class SqlRunner {
         Connection conn = null;
         try {
             conn = DataSourcePool.getConnection(this.dsName);
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return queryRunner.query(conn, sql, new BeanHandler<T>(clazz),
                     params);
         } catch (SQLException e) {
@@ -287,8 +286,8 @@ public class SqlRunner {
     public <T> T queryObj(Connection conn, Class<T> clazz, String sql,
             Object... params) throws SQLException {
         try {
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return queryRunner.query(conn, sql, new BeanHandler<T>(clazz),
                     params);
         } catch (SQLException e) {
@@ -319,8 +318,8 @@ public class SqlRunner {
         Connection conn = null;
         try {
             conn = DataSourcePool.getConnection(this.dsName);
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return queryRunner.query(conn, sql, new BeanListHandler<T>(clazz),
                     params);
         } catch (SQLException e) {
@@ -352,8 +351,8 @@ public class SqlRunner {
     public <T> List<T> queryObjs(Connection conn, Class<T> clazz, String sql,
             Object... params) throws SQLException {
         try {
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return queryRunner.query(conn, sql, new BeanListHandler<T>(clazz),
                     params);
         } catch (SQLException e) {
@@ -402,8 +401,8 @@ public class SqlRunner {
         Connection conn = null;
         try {
             conn = DataSourcePool.getConnection(this.dsName);
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return queryRunner.query(conn, sql, h, params);
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -455,8 +454,8 @@ public class SqlRunner {
             }
         };
         try {
-            log.info("SQL=[" + sql + "],PARAM=["
-                    + StringUtils.join(params, ',') + "]");
+            // log.info("SQL=[" + sql + "],PARAM=["
+            // + StringUtils.join(params, ',') + "]");
             return (SqlResultSet) queryRunner.query(conn, sql, h, params);
         } catch (SQLException e) {
             log.error(e.getMessage());
