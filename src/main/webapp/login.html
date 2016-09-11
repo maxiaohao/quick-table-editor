@@ -11,32 +11,23 @@
 
 <script type="text/javascript" src="js/login.js"></script>
 
-<style type="text/css">
-.centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -200px;
-}
-</style>
 </head>
 <body>
-    <div id="dd" class="easyui-dialog" title="Welcome to quick-table-editor!" style="width: 310px; padding: 20px"
+    <div class="easyui-dialog" title="Welcome to quick-table-editor!" style="width: 320px; padding: 10px 10px 0px 10px"
         data-options="resizable:false, border: 'thin', modal:false, closable: false, draggable: false, buttons:'#buttons'">
-        <form id="loginForm" method="post">
-            <div style="margin-bottom: 10px">
-                <input class="easyui-textbox" name="name" style="width: 260px;"
-                    data-options="label:'Login Name:',required:true">
-            </div>
-            <div style="margin-bottom: 0px">
-                <input class="easyui-passwordbox" name="password" style="width: 260px"
-                    data-options="label:'Password:',required:true">
-            </div>
-            <div id="buttons" style="text-align: center">
-                <a id="loginButton" style="width: 80px" href="#" class="easyui-linkbutton">Login</a>
-            </div>
-        </form>
+        <div style="margin: 20px 8px 10px 8px">
+            <input id="loginName" class="easyui-textbox" name="login_name" style="width: 260px;" data-options="label:'Login Name:'">
+        </div>
+        <div style="margin: 15px 8px 0px 8px">
+            <input id="password" class="easyui-passwordbox" name="password" style="width: 260px"
+                data-options="label:'Password:'">
+        </div>
+        <div id="errMsg" style="text-align: center; margin: 0px 8px 0px 8px; visibility: hidden">
+            <p style="color: red">Incorrect login name or password.</p>
+        </div>
+        <div id="buttons" style="text-align: center">
+            <div id="loginButton" style="width: 80px" class="easyui-linkbutton">Login</div>
+        </div>
     </div>
 </body>
 </html>

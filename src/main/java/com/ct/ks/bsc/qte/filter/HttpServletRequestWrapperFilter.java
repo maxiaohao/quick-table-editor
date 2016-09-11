@@ -40,8 +40,8 @@ public class HttpServletRequestWrapperFilter implements Filter {
             chain.doFilter(new QteAuthHttpServletRequestWrapper((HttpServletRequest) request, new QteUserPrincipal(
                     loginName)), response);
         } else {
-            //request.getRequestDispatcher("/login.html").forward(request, response);
-           (( HttpServletResponse)response).sendRedirect(request.getServletContext().getContextPath()+"/login.html");
+            // request.getRequestDispatcher("/login.html").forward(request, response);
+            ((HttpServletResponse) response).sendRedirect(request.getServletContext().getContextPath() + "/login.html");
         }
     }
 

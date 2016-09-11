@@ -1,7 +1,33 @@
+
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<title>quick-table-editor</title>
+<link rel="stylesheet" type="text/css" href="../third-party/jquery-easyui/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="../third-party/jquery-easyui/themes/icon.css">
+<script type="text/javascript" src="../third-party/jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../third-party/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../third-party/json2/json2.js"></script>
+<script type="text/javascript" src="../third-party/JavaScript-MD5/js/md5.min.js"></script>
+
+<script type="text/javascript" src="js/main.js"></script>
+
 </head>
-<body>TODO
+<body class="easyui-layout" data-options="">
+    <div class="easyui-accordion" data-options="region:'west', split: true, border: false, collapsedSize: 12"
+        style="width: 150px; padding: 0px;">
+
+        <div title="My Tables" data-options="border: false, selected: false, multiple: true" style=""></div>
+        <div title="Admin Area" data-options="border: false, selected: false, multiple: true" style="">
+            <ul class="easyui-datalist">
+                <li><a href="javascript:void(0);">User Admin</a></li>
+                <li>Alaska</li>
+            </ul>
+        </div>
+
+    </div>
+    <div data-options="region:'center', border: false"></div>
+
 </body>
 </html>

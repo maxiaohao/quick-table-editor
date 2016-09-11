@@ -42,7 +42,7 @@ public class MasterCrudHandler {
             if (cnt.intValue() == 0) {
                 log.warn("No master database found and now initialize a new one ...");
                 runner.exec("RUNSCRIPT FROM 'classpath:" + Constants.INIT_DB_SQL_FILENAME + "'");
-                log.warn("Master database initialzed successfully ({}.h2.db)", Constants.CONFIG_H2_DB_FILE);
+                log.warn("Master database initialized successfully ({}.h2.db)", Constants.CONFIG_H2_DB_FILE);
             } else {
                 log.warn("Found existing master database '{}.h2.db'", Constants.CONFIG_H2_DB_FILE);
             }
