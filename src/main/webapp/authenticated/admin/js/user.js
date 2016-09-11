@@ -28,51 +28,75 @@ $(function() {
             handler : function() {
                 $("#windowUserDetails").window('close');
             }
-        } ]
+        } ],
+        onClose : function() {
+            $('#formUser').form('clear');
+            $("#password").passwordbox('clear');
+            $("#retype-password").passwordbox('clear');
+        }
     });
 
-    var toolbar = [ {
-        text : 'Refresh',
-        iconCls : 'icon-reload',
-        handler : function() {
-            refreshAll();
-        }
-    }, '-', {
-        text : 'Create User',
-        iconCls : 'icon-add',
-        handler : function() {
-            openWindowUserDetails('create', null);
-        }
-    }, {
-        id : 'btnEdit',
-        text : 'Edit Selected User',
-        iconCls : 'icon-edit',
-        handler : function() {
-            var selUser = $('#gridUsers').datagrid('getSelected');
-            openWindowUserDetails('update', selUser);
-        },
-        disabled : true
-    }, {
-        text : 'Delete Selected User',
-        iconCls : 'icon-remove',
-        handler : function() {
-            $.ajax({
-                url : 'admin-crud?model=user&action=delete',
-                success : function(ret) {
-                    if (ret.success) {
-                        $.messager.alert('Success', ret.msg, 'info');
-                        refreshAll();
-                    } else {
-                        $.messager.alert('Error', ret.msg, 'error');
-                    }
-                },
-                error : function() {
-                    $.messager.alert('Internal Error', 'Failed get response from server!', 'error');
+    var toolbar = [
+            {
+                text : 'Refresh',
+                iconCls : 'icon-reload',
+                handler : function() {
+                    refreshAll();
                 }
-            });
-        },
-        style : 'text-align:right'
-    } ];
+            },
+            '-',
+            {
+                text : 'Create User',
+                iconCls : 'icon-add',
+                handler : function() {
+                    openWindowUserDetails('create', null);
+                }
+            },
+            {
+                id : 'btnEdit',
+                text : 'Edit Selected User',
+                iconCls : 'icon-edit',
+                handler : function() {
+                    var selUser = $('#gridUsers').datagrid('getSelected');
+                    openWindowUserDetails('update', selUser);
+                },
+                disabled : true
+            },
+            {
+                id : 'btnDelete',
+                text : 'Delete Selected User',
+                iconCls : 'icon-remove',
+                handler : function() {
+                    var selUser = $('#gridUsers').datagrid('getSelected')
+                    $.messager.confirm('Confirm', 'Are you sure to delete user "' + selUser.login_name + '"?',
+                            function(r) {
+                                if (r) {
+                                    $.ajax({
+                                        url : 'admin-crud',
+                                        data : {
+                                            model : 'user',
+                                            action : 'delete',
+                                            user_id : selUser.user_id
+                                        },
+                                        success : function(ret) {
+                                            if (ret.success) {
+                                                $.messager.alert('Success', 'User "' + selUser.login_name
+                                                        + '" has been deleted successfully. ', 'info');
+                                                refreshAll();
+                                            } else {
+                                                $.messager.alert('Error', ret.msg, 'error');
+                                            }
+                                        },
+                                        error : function() {
+                                            $.messager.alert('Internal Error', 'Failed get response from server!',
+                                                    'error');
+                                        }
+                                    });
+                                }
+                            });
+                },
+                disabled : true
+            } ];
 
     $('#gridUsers').datagrid({
         toolbar : toolbar,
@@ -108,9 +132,11 @@ $(function() {
         } ] ],
         onSelect : function(index, row) {
             $('#btnEdit').linkbutton('enable');
+            $('#btnDelete').linkbutton('enable');
         },
         onBeforeUnselect : function(index, row) {
             $('#btnEdit').linkbutton('disable');
+            $('#btnDelete').linkbutton('disable');
         },
         loader : function(param, success, error) {
             $.ajax({
@@ -129,10 +155,31 @@ $(function() {
 
     function openWindowUserDetails(action, selUser) {
         if ('create' === action) {
-
+            $("#password").passwordbox({
+                prompt : 'Password',
+                required : true
+            });
+            $("#retype-password").passwordbox({
+                prompt : 'Re-type password',
+                required : true
+            });
         } else {
             if (selUser) {
-                $('#formUser').form('load', selUser);
+                $('#formUser').form('load', {
+                    user_id : selUser.user_id,
+                    login_name : selUser.login_name,
+                    user_name : selUser.user_name,
+                    admin : selUser.admin ? 'on' : '',
+                    disabled : selUser.disabled ? 'on' : ''
+                });
+                $("#password").passwordbox({
+                    prompt : 'Leave empty for no change',
+                    required : false
+                });
+                $("#retype-password").passwordbox({
+                    prompt : 'Leave empty for no change',
+                    required : false
+                });
             } else {
                 $.messager.alert('Error', 'No selected user', 'error');
                 return;
@@ -154,8 +201,8 @@ $(function() {
                 if (!fieldsValid) {
                     return false;
                 }
-                var pass1 = $("#windowUserDetails input[name='password']").val();
-                var pass2 = $("#windowUserDetails input[name='retype-password']").val();
+                var pass1 = $("#password").val();
+                var pass2 = $("#retype-password").val();
                 if ('create' === action || ('update' === action && (pass1 || pass2))) {
                     if ('create' === action && (!pass1 && !pass2)) {
                         $.messager.alert('Invalid Password', 'Password should not be empty!', 'error');
@@ -195,6 +242,7 @@ $(function() {
 
     function refreshAll() {
         $('#btnEdit').linkbutton('disable');
+        $('#btnDelete').linkbutton('disable');
         $("#windowUserDetails").window('close');
         $('#formUser').form('clear');
         $("#gridUsers").datagrid('clearSelections');
